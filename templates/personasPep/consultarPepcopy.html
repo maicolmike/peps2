@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'lib/adminlte-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/adminlte-3.2.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/adminlte-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+
+
+<div class="container">
+    <!-- div inicial -->
+    <div class="container">
+        <div class="row">
+            <div class="col" style=" margin-right: 15px; border-radius: 20px; padding: 1em;text-align: center;">
+                <div class="card shadow table-responsive" style="border-radius: 20px;">
+                    <div class="card-body table-responsive">
+                        <img src="{% static 'img/logoCootep.png' %}" width="200" height="" alt="COOTEP LTDA" title="COOTEP LTDA">
+                        <h5><b>Consultar documento de identificación</b></h5>
+                        
+                        <form method="post" action="{% url 'consultar_pep' %}">
+                            {% csrf_token %}
+                            <input type="text" name="documento" placeholder="Digite número de documento" style="margin-right: 15px;">
+                            <button type="submit" class="btn btn-success" id="consultarBtn">Consultar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col" style="border-radius: 20px; padding: 1em; text-align: center;" id="resultado">
+                <div class="card shadow table-responsive" style=" height: 100%; border-radius: 20px;">
+                    <div class="card-body table-responsive">
+                        <div class="row">
+                            <div class="col">
+                                <h5><b>Resultado de la búsqueda</b></h5>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {% if persona_encontrada %}
+                                <h6>{{ persona_encontrada.nombre }} {{ persona_encontrada.identificacion }}</h6>
+                                <h6><b>Es un PEP</b></h6>
+                                <a href="{% url 'persona_detalle' persona_encontrada.id %}" class="btn btn-success fa-regular fa-eye"></a>
+                              <!-- <a href="" class="btn btn-primary fa-solid fa-pen" id="btn-edit{{ persona_encontrada.id }}" data-toggle="modal" data-target="#modal{{ persona_encontrada.id }}"></a>-->  
+                              {#  {% include 'personasPep/modalVerdetallesPep.html' %} #}
+                                {% elif familiares_encontrados %}
+                                {% for familiar in familiares_encontrados %}
+                                <h6>{{ familiar.nombre }} - Es familiar de <b>{{ familiar.persona_pep.nombre }}</b> {{ familiar.persona_pep.identificacion }}</h6>
+                                <a href="{% url 'persona_detalle' familiar.persona_pep.id %}" class="btn btn-success fa-regular fa-eye"></a>
+                                
+                                {% endfor %}
+                            </div>
+                        </div>
+                                {% else %}
+                                {% include 'messages.html' %}
+                                {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    <br>
+    </div>
+    <!-- div final-->
+    
+<br>
+    <div class="container">  <!-- div inicial-->
+        <div class="card shadow table-responsive">
+            <div class="card-body table-responsive">
+                <h4>Listado de asociados pep</h4>
+                <!-- Tabla -->
+                <table class="table table-bordered table-hover"> <!-- table-striped-->
+                  <!-- columnas de la tabla table-light thead-light table-secondary-->
+                    <thead class="table-secondary">
+                        <tr>
+                            <th scope="col">Identificacion</th>
+                            <th scope="col">Nombre y apellidos</th>
+                            <th scope="col" style="text-align: center;">Ver nucleo familiar</th>
+                        </tr>
+                    </thead>
+                <!-- columnas de la tabla-->
+                <tbody>
+                  <!-- inicio for -->
+                  <!-- Iterar sobre la lista de asociados PEP -->
+                  {% for asociado in lista_de_asociados_pep %}
+                        <tr>
+                            <td>{{ asociado.identificacion }}</td> <!-- id-->
+                            <td>{{ asociado.nombre }}</td> <!--username-->
+                            <td style="text-align: center;">
+                                <!-- Enlace para ver el núcleo familiar del asociado -->
+                                <a href="{% url 'persona_detalle' asociado.id %}" class="btn btn-success fa-regular fa-eye"></a>
+                            </td> <!-- email-->
+                        </tr>
+                        {% endfor %}
+                    <!-- Final for -->
+                </tbody>
+      
+                </table>
+      
+            {% include 'usuarios/snippets/paginator.html' %}    <!--  Dentro de este archivo configuro las paginas -->
+      
+      <!-- final Tabla -->
+            </div>
+        </div>
+    </div>  <!-- div final-->
+
+{% endblock %}

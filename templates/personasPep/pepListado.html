@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% if user.is_superuser == 1 %} <!-- valido que el usuario que ingresa a esta ruta sea un administrador tipo= 1-->
+
+<!-- div inicial-->
+<div class="container">
+    <div class="card shadow table-responsive">
+        <div class="card-body table-responsive">
+            <h4 style="text-align: center;"><b>Listado de asociados pep</b></h4>
+            <table id="example1" class="table table-bordered table-hover">
+                <thead class="table-secondary">
+                    <tr>
+                        <th class="sorting sorting_asc">Identificacion</th>
+                        <th>Nombre y apellidos</th>
+                        <th style="text-align: center;">Ver nucleo familiar</th>
+                        <th style="text-align: center;">Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- inicio for -->
+                <!-- Iterar sobre la lista de asociados PEP -->
+                {% for asociado in object_list %}
+                    <tr>
+                        <td>{{ asociado.identificacion }}</td> <!-- id-->
+                        <td>{{ asociado.nombre }}</td> <!--username-->
+                        <td style="text-align: center;">
+                        <!-- Enlace para ver el núcleo familiar del asociado -->
+                        <a href="{% url 'persona_detalle' asociado.id %}" class="btn btn-success fa-regular fa-eye"></a>
+                        </td>
+                        <td style="text-align: center;">
+                            <!-- Enlace para ver el núcleo familiar del asociado -->
+                            <a href="{% url 'crear_familiares' persona_pep_id=asociado.id %}?messageListado=Actualizar" class="btn btn-info fa-solid fa-pen-to-square"></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <!-- Final for -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- div final-->
+
+<!-- Codigo para libreria adminLte funcione el proceso de busqueda del datatable-->
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "lengthMenu": [3, 10, 25],
+        "pageLength": 7,
+        "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Mostrar _MENU_ registros",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "Ningún dato disponible en esta tabla",
+          "sInfo": "_START_ al _END_ de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+            "sFirst": "Primero",
+            "sLast": "Último",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+        }
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+
+
+{% else %}  <!-- aqui pongo el final del condicional para saber si el que accede es un administrador-->
+
+{% include 'accesoRestringido.html' %}    <!--  Dentro de este archivo configuro el mensaje a mostar -->
+
+{% endif %}  <!-- aqui pongo el final del condicional para saber si el que accede es un administrador-->
+
+
+{% endblock %}
+
+
+
+
+{% comment %}
+<!-- div inicial-->
+<h4>Listado de asociados pep</h4>
+<div class="container">
+    <div class="card shadow table-responsive">
+        <div class="card-body table-responsive">
+            
+            <!-- Tabla -->
+            <table class="table table-bordered table-hover">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col">Identificacion</th>
+                        <th scope="col">Nombre y apellidos</th>
+                        <th scope="col" style="text-align: center;">Ver nucleo familiar</th>
+                        <th scope="col" style="text-align: center;">Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterar sobre la lista de asociados PEP -->
+                    {% for asociado in object_list %}
+                        <tr>
+                            <td>{{ asociado.identificacion }}</td>
+                            <td>{{ asociado.nombre }}</td>
+                            <td style="text-align: center;">
+                                <!-- Enlace para ver el núcleo familiar del asociado -->
+                                <a href="{% url 'persona_detalle' asociado.id %}" class="btn btn-success fa-regular fa-eye"></a>
+                            </td>
+                            <td style="text-align: center;">
+                                <!-- Enlace para ver el núcleo familiar del asociado -->
+                                <a href="{% url 'crear_familiares' persona_pep_id=asociado.id %}?messageListado=Actualizar" class="btn btn-info fa-solid fa-pen-to-square"></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include 'usuarios/snippets/paginator.html' %} <!-- Configuración de paginación -->
+        </div>
+    </div>
+</div> <!-- div final-->
+
+{% endcomment %}

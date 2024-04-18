@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if user.is_superuser == 1 %} <!-- valido que el usuario que ingresa a esta ruta sea un administrador tipo= 1-->
+
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+
+<div class="col">
+  {% include 'messages.html' %}
+  <div class="row">
+    <div class="col-sm-7">
+      {% if messageListado != 'Actualizar' %}
+      <a href="{% url 'crear_pep' %}" class="btn btn-success" style="background-color:rgb(4,105,4);">Volver</a>
+      {% else %}
+      <a href="{% url 'listarAsociados' %}" class="btn btn-success" id="volverBtn" style="background-color:rgb(4,105,4);">Volver</a>
+      {% endif%}
+    </div>
+    <div class="col-sm-5">
+      <h6"><strong>Fecha de registro como Pep:</strong></h6>
+      <span style="margin-left:20px;">{{ persona_pep.fecha_registro_pep }}</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="" style="margin-left:700px;">
+      <h6"><strong>Fecha de actualizacion:</strong></h6>
+      <span style="margin-left:20px;">{{ persona_pep.fecha_actualizacion }}</span>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 30px;">
+    <div class="col">
+      <div class="card">
+        <div class="card-header"><h6><strong>Datos del titular Pep</strong></h6></div>
+        <div class="card-body">
+          <div>
+            <table class="table table-borderless table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Identificacion</th>
+                  <th>Nombres y apellidos</th>
+                  <th>Cargo</th>
+                  <th>Estado</th>
+                  <th>Es pep</th>
+                  <th>Accion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ persona_pep.identificacion }}</td>
+                  <td>{{ persona_pep.nombre }}</td>
+                  <td>{{ persona_pep.cargo }}</td>
+                  <td>{{ persona_pep.estado }}</td>
+                  <td>{{ persona_pep.es_pep }}</td>
+                  <td><a href="{% url 'editar_pep' pk=persona_pep.pk %}" class="btn btn-info fa-solid fa-pen-to-square"></a></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="" style="margin-left:650px;">
+                <h6"><strong>Fecha de vinculacion laboral:</strong></h6>
+                <span style="margin-left:20px;">{{ persona_pep.fecha_vinculacion }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="" style="margin-left:622px;">
+                <h6"><strong>Fecha de desvinculacion laboral:</strong></h6>
+                <span style="margin-left:20px;">{{ persona_pep.fecha_desvinculacion }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="" style="margin-left:550px;">
+                <h6"><strong>Tiene cuentas financieras en el extranjero:</strong></h6>
+                <span style="margin-left:20px;">{{ persona_pep.cuentas_extranjeras }}</span>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 30px;">
+    <div class="col" style="padding-bottom: 50px;">
+      <div class="card">
+        <div class="card-header"><strong>Informacion nucleo familiar</strong></div>
+        <div class="card-body">
+          <!-- Inicio Formulario -->
+          <form class="form-create" method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col">
+                {{ form.identificacion }}
+              </div>
+              <div class="col">
+                {{ form.nombre }}
+              </div>
+              <div class="col">
+                {{ form.parentesco }}
+              </div>
+              <div class="col form-check">
+                {{ form.estado }}
+              </div>
+              <div class="col">
+                <button type="submit" class="btn btn-success" style="background-color:rgb(4,105,4);">Añadir (+)</button>
+                {% if messageListado != 'Actualizar' %}
+                <a href="{% url 'crear_pep' %}" class="btn btn-success" style="background-color:rgba(105, 4, 4, 0.795);">Salir</a>
+                {% else %}
+                <a href="{% url 'listarAsociados' %}" class="btn btn-success" style="background-color:rgba(105, 4, 4, 0.795);">Salir</a>
+                {% endif%}
+              </div>
+            </div>
+            <table class="table table-borderless table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Identificacion</th>
+                  <th>Nombres y apellidos</th>
+                  <th>Parentesco</th>
+                  <th>Estado</th>
+                  <th>Accion</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for familiar in familiares %}
+                <tr>
+                  <td>{{ familiar.identificacion }}</td>
+                  <td>{{ familiar.nombre }}</td>
+                  <td>{{ familiar.parentesco }}</td>
+                  <td>{{ familiar.estado }}</td>
+                  <td><a href="{% url 'editar_familiar_pep' familiar_id=familiar.pk %}" class="btn btn-info fa-solid fa-pen-to-square" id="btn-edit{{ familiar.id }}"></a>
+                      <a href="" class="btn btn-danger fa-solid fa-trash" id="btn-eliminar{{ familiar.id }}" data-toggle="modal" data-target="#modal3{{ familiar.id }}"></a>
+                  </td>
+                </tr>
+                {% include 'personasPep/modalEliminarFamiliarPep.html' %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </form>
+          <!-- Fin Formulario -->
+        </div>
+      </div>
+
+      <br>
+    
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <a href="" class="btn btn-danger" id="btn-eliminar{{ persona_pep.id }}" data-toggle="modal" data-target="#modal4{{ persona_pep.id }}">Eliminar pep y nucleo familiar</a>
+        {% include 'personasPep/modalEliminarPepFamiliares.html' %}
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+{% else %}  <!-- aqui pongo el final del condicional para saber si el que accede es un administrador-->
+
+{% include 'accesoRestringido.html' %}    <!--  Dentro de este archivo configuro el mensaje a mostar -->
+
+{% endif %}  <!-- aqui pongo el final del condicional para saber si el que accede es un administrador-->
+
+{% endblock %}
