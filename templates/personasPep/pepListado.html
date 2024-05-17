@@ -14,6 +14,7 @@
                     <tr>
                         <th class="sorting sorting_asc">Identificacion</th>
                         <th>Nombre y apellidos</th>
+                        <th>Estado pep</th>
                         <th style="text-align: center;">Ver nucleo familiar</th>
                         <th style="text-align: center;">Editar</th>
                     </tr>
@@ -25,6 +26,7 @@
                     <tr>
                         <td>{{ asociado.identificacion }}</td> <!-- id-->
                         <td>{{ asociado.nombre }}</td> <!--username-->
+                        <td>{{ asociado.es_pep }}</td> <!--username-->
                         <td style="text-align: center;">
                         <!-- Enlace para ver el núcleo familiar del asociado -->
                         <a href="{% url 'persona_detalle' asociado.id %}" class="btn btn-success fa-regular fa-eye"></a>
