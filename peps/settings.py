@@ -26,15 +26,15 @@ SECRET_KEY = 'django-insecure-s@*%i&oxy3v9sd3l)r94pkb31t%13jy$(w!jpzcx8pqvq72nk%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Para el comando runserver
-DEBUG = False
+DEBUG = True
 
-#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['10.180.131.5', 'localhost', '127.0.0.1']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -69,7 +69,6 @@ AUTH_USER_MODEL = 'users.User'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
 	'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
