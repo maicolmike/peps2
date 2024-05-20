@@ -11,7 +11,9 @@ from django.db import transaction
 from .forms import ConsultarDocumentoForm
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin # vista basada en clases que no permita acceder a paginas donde no se ha logeado
-
+import openpyxl
+from openpyxl.styles import Font
+from django.http import HttpResponse
 
 class PersonaPEPDetailView(LoginRequiredMixin,DetailView):
     model = PersonaPEP
@@ -184,3 +186,60 @@ class PepListView(LoginRequiredMixin,ListView):
         #context['usersList']=context['user_list']
         
         return context
+    
+
+def exportar_personas_pep_excel(request):
+    # Crea un libro de trabajo y una hoja
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Personas PEP'
+
+    # Escribe la cabecera del archivo Excel
+    headers = [
+        'Nombre', 'Identificación', 'Es PEP', 'Estado', 'Tipo PEP', 'Cargo', 'Fecha Vinculación', 
+        'Fecha Desvinculacion', 'Cuentas Extranjeras', 'Fecha Registro PEP', 'Fecha Actualización',
+        'ID Familiar', 'Nombre Familiar', 'Parentesco', 'Estado Familiar'
+    ]
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col_num)
+        cell.value = header
+        cell.font = Font(bold=True)
+
+    # Escribe los datos de cada PersonaPEP y sus familiares
+    row_num = 2
+    for persona in PersonaPEP.objects.all():
+        # Escribe los datos de la persona
+        persona_data = [
+            persona.nombre,
+            persona.identificacion,
+            persona.es_pep,
+            persona.estado,
+            persona.tipo_pep,
+            persona.cargo,
+            persona.fecha_vinculacion,
+            persona.fecha_desvinculacion if persona.fecha_desvinculacion else '',
+            persona.cuentas_extranjeras,
+            persona.fecha_registro_pep,
+            persona.fecha_actualizacion,
+        ]
+        
+        # Escribe los datos de cada familiar en una fila separada
+        for familiar in persona.familiares.all():
+            familiar_data = [
+                familiar.identificacion,
+                familiar.nombre,
+                familiar.parentesco,
+                familiar.estado
+            ]
+            complete_data = persona_data + familiar_data
+            for col_num, cell_value in enumerate(complete_data, 1):
+                ws.cell(row=row_num, column=col_num, value=cell_value)
+            row_num += 1
+
+    # Configura la respuesta HTTP con el tipo de contenido de Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="personas_pep.xlsx"'
+
+    # Guarda el libro de trabajo en la respuesta
+    wb.save(response)
+    return response

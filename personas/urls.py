@@ -15,4 +15,5 @@ urlpatterns = [
     path('consultarPep/', views.consultar_pep, name='consultar_pep'),  
     path('consultarPep2/', views.consultar_pep2, name='consultar_pep2'), 
     path('pepListado/',views.PepListView.as_view(), name='listarAsociados'),
+    path('exportar-personas-pep-excel/', views.exportar_personas_pep_excel, name='exportar_personas_pep_excel'),
 ]
