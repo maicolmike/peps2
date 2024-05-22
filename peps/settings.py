@@ -148,7 +148,7 @@ USE_TZ = True
 
 # Configurar la duración de la sesión en segundos (5 minutos)
 SESSION_COOKIE_AGE = 300
-SESSION_COOKIE_SECURE = 300
+SESSION_COOKIE_SECURE = False  # True si estï¿½s usando HTTPS
 SESSION_COOKIE_HTTPONLY = 300
 
 # Configurar para que la sesión se actualice con cada solicitud
