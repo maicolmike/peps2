@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-s@*%i&oxy3v9sd3l)r94pkb31t%13jy$(w!jpzcx8pqvq72nk%
 # Para el comando runserver
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = ['10.180.131.5', 'localhost', '127.0.0.1']
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'peps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'peps',
+        'NAME': 'peps2',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
