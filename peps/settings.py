@@ -148,10 +148,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Configurar la duración de la sesión en segundos (5 minutos)
-SESSION_COOKIE_AGE = 300
+# Configurar la duración de la sesión en segundos (15 minutos) se multiplica 60 segundos por los minutos
+SESSION_COOKIE_AGE = 900
 SESSION_COOKIE_SECURE = False  # True si estï¿½s usando HTTPS
-SESSION_COOKIE_HTTPONLY = 300
+SESSION_COOKIE_HTTPONLY = 900
 
 # Configurar para que la sesión se actualice con cada solicitud
 SESSION_SAVE_EVERY_REQUEST = True
