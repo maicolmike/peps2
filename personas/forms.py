@@ -71,7 +71,11 @@ class CrearFamiliaresForm(ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Nombre y apellidos','id': 'nombre'}),
             'identificacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Identificacion','id': 'identificacion'}),
             'parentesco': forms.Select(attrs={'id': 'parentesco','class': 'form-control'}, 
+<<<<<<< HEAD
                                        choices=[('', 'Seleccionar parentesco'),('Conyuge', 'Cónyuge'), ('Hijos (as)', 'Hijos (as)'), ('Hijos (as) adoptivos', 'Hijos (as) adoptivos'), ('Padres o madres', 'Padres o madres'), ('Padres adoptantes o madres adoptantes', 'Padres adoptantes o madres adoptantes'), ('Suegros (as)', 'Suegros (as)'), ('Yernos o nueras', 'Yernos o nueras'), ('Abuelos (as)', 'Abuelos (as)'), ('Hermanos (as)', 'Hermanos (as)'), ('Nietos (as)', 'Nietos (as)')]),
+=======
+                                       choices=[('', 'Seleccionar parentesco'), ('Conyuge', 'Conyuge'), ('Hijos (as)', 'Hijos (as)'),('Hijos (as) adoptivos', 'Hijos (as) adoptivos'), ('Padres o madres', 'Padres o madres'), ('Padres adoptantes o madres adoptantes', 'Padres adoptantes o madres adoptantes'), ('Suegros (as)', 'Suegros (as)'), ('Yernos o nueras', 'Yernos o nueras'), ('Abuelos (as)', 'Abuelos (as)'), ('Hermanos (as)', 'Hermanos (as)'), ('Nietos (as)', 'Nietos (as)')]),
+>>>>>>> 8d93e338149bb898fe612d18097d986d0a73c9bb
             'estado': forms.Select(attrs={'id': 'estado','class': 'form-control'}, choices=[('', 'Seleccionar estado'), ('Asociado', 'Asociado'), ('No asociado', 'No asociado'), ('Retirado', 'Retirado')]),
         }
         
